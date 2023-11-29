@@ -1,20 +1,21 @@
-# Use an official Node.js runtime as a parent image
-FROM node:14-alpine
+# Use the official Go image as the base image
+FROM golang:1.19-alpine
 
-# Set the working directory to /app
+# Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
 
-# Install dependencies
-RUN npm install
+# Copy the Go module files
+COPY go.mod go.sum ./
 
-# Copy the current directory contents into the container at /app
+# Download the dependencies
+RUN go mod download
+
+# Copy the rest of the application code
 COPY . .
 
-# Expose port 3000 for the Express.js app
-EXPOSE 3000
+# Build the Go application
+RUN go build -o main .
 
-# Set the command to run when the container starts
-CMD ["npm", "start"]
+# Set the entry point command to run the built binary
+CMD ["./main"]
