@@ -1,0 +1,1 @@
+### Log file for the current run. This file is overwritten every time the program is run.
