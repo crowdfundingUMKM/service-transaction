@@ -3,7 +3,7 @@ package payment
 import (
 	"fmt"
 	"os"
-	"os/user"
+	
 	"strconv"
 
 	midtrans "github.com/veritrans/go-midtrans"
