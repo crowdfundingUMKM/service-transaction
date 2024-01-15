@@ -10,7 +10,7 @@ type transactionHandler struct {
 	authService auth.Service
 }
 
-func NewTransactionHandler(transactionService core.Service, authService auth.Service) *userInvestorHandler {
+func NewTransactionHandler(transactionService core.Service, authService auth.Service) *transactionHandler {
 	return &transactionHandler{transactionService, authService}
 }
 
