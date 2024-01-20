@@ -1,17 +1,15 @@
 package core
 
-import (
-	"go.mongodb.org/mongo-driver/mongo"
-)
+import "gorm.io/gorm"
 
 type Repository interface {
 }
 
 // "go.mongodb.org/mongo-driver/mongo"
 type repository struct {
-	db *mongo.Database
+	db *gorm.DB
 }
 
-func NewRepository(db *mongo.Database) *repository {
+func NewRepository(db *gorm.DB) *repository {
 	return &repository{db}
 }
