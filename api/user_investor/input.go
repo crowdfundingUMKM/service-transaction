@@ -4,7 +4,7 @@ type InvestorIdInput struct {
 	UnixID string `uri:"investor_id" binding:"required"`
 }
 
-type VerifyTokenInvestorInput struct {
+type VerifyTokenUserInvestorInput struct {
 	Token string `json:"token" binding:"required"`
 }
 

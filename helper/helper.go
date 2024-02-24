@@ -41,13 +41,13 @@ func FormatValidationError(err error) []string {
 	return errors
 }
 
-// Admin Request
+// api user investor
 type UserInvestor struct {
 	UnixInvestor          string `json:"unix_investor"`
 	StatusAccountInvestor string `json:"status_account_investor"`
 }
 
-type InvestorStatusResponse struct {
+type UserInvestorResponse struct {
 	Meta Meta         `json:"meta"`
 	Data UserInvestor `json:"data"`
 }

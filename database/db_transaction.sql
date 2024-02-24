@@ -13,6 +13,7 @@ CREATE TABLE `transactions` (
   `expiry_time` DATETIME,
   `fraud` VARCHAR(255),
   `url_payment` VARCHAR(255),
+  `token` VARCHAR(255),
   `created_at` DATETIME,
   `updated_at` DATETIME
 );

@@ -11,7 +11,7 @@ import (
 func GetInvestorId(input InvestorIdInput) (string, error) {
 	// check service admin
 
-	err := CheckServiceInvestor()
+	err := CheckServiceUserInvestor()
 	if err != nil {
 		return "", err
 	}
@@ -19,22 +19,22 @@ func GetInvestorId(input InvestorIdInput) (string, error) {
 	investorID := helper.UserInvestor{}
 	investorID.UnixInvestor = input.UnixID
 	// fetch get /getAdminID from service api
-	serviceInvestor := os.Getenv("SERVICE_INVESTOR_HOST")
+	serviceInvestor := os.Getenv("SERVICE_INVESTOR")
 	// if service admin is empty return error
 	if serviceInvestor == "" {
-		return investorID.UnixInvestor, errors.New("service investor is empty")
+		return investorID.UnixInvestor, errors.New("service user investor is empty")
 	}
-	resp, err := http.Get(serviceInvestor + "/api/v1/getInvestorID/" + investorID.UnixInvestor)
+	resp, err := http.Get(serviceInvestor + "/api/v1/investor/getUserInvestorID/" + investorID.UnixInvestor)
 	if err != nil {
 		return investorID.UnixInvestor, err
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return investorID.UnixInvestor, errors.New("failed to get user investor status or user investor not found")
+		return investorID.UnixInvestor, errors.New("failed to get user investor status or investor not found")
 	}
 
-	var response helper.InvestorStatusResponse
+	var response helper.UserInvestorResponse
 	err = json.NewDecoder(resp.Body).Decode(&response)
 	if err != nil {
 		return "", err
@@ -47,25 +47,25 @@ func GetInvestorId(input InvestorIdInput) (string, error) {
 	} else if response.Data.StatusAccountInvestor == "active" {
 		return investorID.UnixInvestor, nil
 	} else {
-		return "", errors.New("invalid user investor status")
+		return "", errors.New("invalid investor status")
 	}
 }
 
-// verify token from service user admin
+// verify token from service user investor
 func VerifyTokenInvestor(input string) (string, error) {
 
-	err := CheckServiceInvestor()
+	err := CheckServiceUserInvestor()
 	if err != nil {
 		return "", err
 	}
 
 	// fetch get /verifyToken from service api
-	serviceInvestor := os.Getenv("SERVICE_INVESTOR_HOST")
+	serviceAdmin := os.Getenv("SERVICE_INVESTOR")
 	// if service admin is empty return error
-	if serviceInvestor == "" {
+	if serviceAdmin == "" {
 		return "", errors.New("service user investor is empty")
 	}
-	req, err := http.NewRequest("GET", serviceInvestor+"/api/v1/verifyTokenInvestor", nil)
+	req, err := http.NewRequest("GET", serviceAdmin+"/api/v1/verifyTokenInvestor", nil)
 
 	if err != nil {
 		return "", err
@@ -85,7 +85,7 @@ func VerifyTokenInvestor(input string) (string, error) {
 		return "", errors.New("invalid token, account deactive or token expired")
 	}
 
-	var response helper.VerifyTokenApiInvestorResponse
+	var response helper.UserInvestorResponse
 	err = json.NewDecoder(resp.Body).Decode(&response)
 	if err != nil {
 		return "", err

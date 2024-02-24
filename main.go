@@ -9,6 +9,7 @@ import (
 	"service-transaction/core"
 	"service-transaction/database"
 	"service-transaction/handler"
+	"service-transaction/middleware"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -46,7 +47,7 @@ func main() {
 	api := router.Group("api/v1")
 
 	// uri for search campaign id and auth bearer token investor
-	api.POST("/create-transaction/:campaign_id", transactionHandler.CreateTransaction)
+	api.POST("/create-transaction/:campaign_id", middleware.AuthApiInvestorMiddleware(authService, transactionService), transactionHandler.CreateTransaction)
 
 	// api.POST("/transactions/notification", transactionHandler.GetNotification)
 
